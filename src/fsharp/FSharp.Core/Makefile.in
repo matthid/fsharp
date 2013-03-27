@@ -35,6 +35,17 @@ FLAGS_4_0 += \
 	--define:PUT_TYPE_PROVIDERS_IN_FSCORE \
 	--extraoptimizationloops:1 
 
+FLAGS_4_5 += \
+	$(DELAY_SIGN_FLAGS) \
+	--compiling-fslib \
+	--nowarn:75,1204 \
+	--target:library \
+	--compiling-fslib-40 \
+	--define:BE_SECURITY_TRANSPARENT \
+	--define:QUERIES_IN_FSLIB \
+	--define:PUT_TYPE_PROVIDERS_IN_FSCORE \
+	--extraoptimizationloops:1 
+
 DEFINES += \
 	--define:RUNTIME
 
@@ -103,9 +114,9 @@ $(tmpdir)FSCore.resources: FSCore.resx
 
 include $(topdir)/src/fsharp/targets.make
 
-do-final: do-4-0 do-2-0 do-2-1
+do-final: do-4-0 do-4-5 do-2-0 do-2-1
 
-clean: clean-4-0 clean-2-0 clean-2-1
+clean: clean-4-0 clean-4-5 clean-2-0 clean-2-1
 
 install: install-lib-4 install-lib-4-5 install-lib-2 install-lib-2-1
 

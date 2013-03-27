@@ -101,6 +101,7 @@ src/fsharp/policy.2.0.FSharp.Core/Makefile
 src/fsharp/policy.4.0.FSharp.Core/Makefile
 src/fsharp/policy.2.3.FSharp.Core/Makefile
 src/fsharp/policy.4.3.FSharp.Core/Makefile
+src/fsharp/policy.4.5.FSharp.Core/Makefile
 ])
 AC_OUTPUT
 

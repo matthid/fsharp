@@ -16,6 +16,8 @@ monolibdir21 := @abs_top_srcdir@/dependencies/mono/2.1/
 
 monolibdir35 := $(monodir)3.5/
 monolibdir4 := $(monodir)4.0/
+monolibdir45 := $(monodir)4.5/
+
 tooldir := $(topdir)lib/bootstrap/4.0/
 
 MONO_OPTIONS += @mono_gc_options@
@@ -26,9 +28,11 @@ DISTVERSION = 201011
 VERSION_2_0 = 2.3.0.0
 VERSION_2_1 = 2.3.1.0
 VERSION_4_0 = 4.3.0.0
+VERSION_4_5 = 4.5.0.0
 TARGET_2_0 = 2.0
 TARGET_2_1 = 2.1
 TARGET_4_0 = 4.0
+TARGET_4_5 = 4.5
 DELAY_SIGN_TOKEN = b03f5f7f11d50a3a
 SIGN_TOKEN = f536804aa0eb945b
 
@@ -109,6 +113,15 @@ DEFINES_4_0 = \
 	--define:FX_ATLEAST_35 \
 	--define:FX_ATLEAST_LINQ
 
+DEFINES_4_5 = \
+	$(DEFINES_GENERAL) \
+	$(DEFINES_DEBUG) \
+	--define:FX_NO_BIGINT_CULTURE_PARSE \
+	--define:FX_ATLEAST_45 \
+	--define:FX_ATLEAST_40 \
+	--define:FX_ATLEAST_35 \
+	--define:FX_ATLEAST_LINQ
+
 REFERENCES_2_0 = \
 	-r:$(monolibdir)Microsoft.Build.Engine.dll \
 	-r:$(monolibdir)Microsoft.Build.Framework.dll \
@@ -124,6 +137,16 @@ REFERENCES_2_1 = \
 	-r:$(monolibdir21)System.dll
 
 REFERENCES_4_0 = \
+	-r:$(monolibdir)Microsoft.Build.Engine.dll \
+	-r:$(monolibdir)Microsoft.Build.Framework.dll \
+	-r:$(monolibdir)Microsoft.Build.Tasks.v4.0.dll \
+	-r:$(monolibdir)Microsoft.Build.Utilities.v4.0.dll \
+	-r:$(monolibdir)mscorlib.dll \
+	-r:$(monolibdir)System.Core.dll \
+	-r:$(monolibdir)System.dll \
+	-r:$(monolibdir)System.Numerics.dll
+
+REFERENCES_4_5 = \
 	-r:$(monolibdir)Microsoft.Build.Engine.dll \
 	-r:$(monolibdir)Microsoft.Build.Framework.dll \
 	-r:$(monolibdir)Microsoft.Build.Tasks.v4.0.dll \

@@ -20,6 +20,9 @@ DEFINES += \
 DEFINES_4_0 += \
         --define:EXTENSIONTYPING
 
+DEFINES_4_5 += \
+        --define:EXTENSIONTYPING
+
 REFERENCES += \
 	-r:$(outdir)FSharp.Core.dll \
 	-r:$(monolibdir)System.Drawing.dll \
@@ -198,9 +201,9 @@ $(tmpdir)ilpars.fs: ../../absil/ilpars.fsy
 
 include $(topdir)/src/fsharp/targets.make
 
-do-final: do-4-0 
+do-final: do-4-0 do-4-5 
 
-clean: clean-4-0
+clean: clean-4-0 clean-4-5
 
 install: install-lib-4 install-lib-4-5
 

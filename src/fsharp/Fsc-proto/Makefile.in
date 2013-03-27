@@ -26,9 +26,9 @@ REFERENCES += \
 sources = \
 	../fscmain.fs
 
-do-proto: do-4-0 $(protodir)FSharp.Core.dll
+do-proto: do-4-0 do-4-5 $(protodir)FSharp.Core.dll
 
-clean: clean-4-0
+clean: clean-4-0 clean-4-5
 
 include $(topdir)/src/fsharp/targets.make
 

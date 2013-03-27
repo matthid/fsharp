@@ -32,9 +32,9 @@ $(tmpdir)FSBuild.fs $(tmpdir)FSBuild.resources: ../FSharp.Build/FSBuild.txt
 	mono $(MONO_OPTIONS) $(FSSRGEN) $< $(tmpdir)FSBuild.fs $(tmpdir)FSBuild.resx
 	resgen $(tmpdir)FSBuild.resx $(tmpdir)FSBuild.resources
 
-do-proto: do-4-0
+do-proto: do-4-0 do-4-5
 
-clean: clean-4-0
+clean: clean-4-0 clean-4-5
 
 include $(topdir)/src/fsharp/targets.make
 

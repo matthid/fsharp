@@ -26,8 +26,9 @@ do-final install:
 	$(MAKE) -C policy.4.0.FSharp.Core $@
 	$(MAKE) -C policy.2.3.FSharp.Core $@
 	$(MAKE) -C policy.4.3.FSharp.Core $@
+	$(MAKE) -C policy.4.5.FSharp.Core $@
 
-clean clean-2-0 clean-4-0:
+clean clean-2-0 clean-4-0 clean-4-5:
 	$(MAKE) -C FSharp.Build-proto $@
 	$(MAKE) -C FSharp.Compiler-proto $@
 	$(MAKE) -C Fsc-proto $@
@@ -44,6 +45,7 @@ clean clean-2-0 clean-4-0:
 	$(MAKE) -C policy.4.0.FSharp.Core $@
 	$(MAKE) -C policy.2.3.FSharp.Core $@
 	$(MAKE) -C policy.4.3.FSharp.Core $@
+	$(MAKE) -C policy.4.5.FSharp.Core $@
 
 clean-2-1 do-2-1:
 	$(MAKE) -C FSharp.Core $@

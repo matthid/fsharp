@@ -1,6 +1,6 @@
 SOURCES := $(patsubst $(srcdir)$(tmpdir)%,$(tmpdir)%,$(patsubst %,$(srcdir)%,$(sources)))
 
-.PHONY: install install-bin install-bin-2 install-bin-4 install-lib
+.PHONY: install install-bin install-bin-2 install-bin-4 install-bin-4-5 install-lib
 
 clean-2-0: TARGET := $(TARGET_2_0)
 clean-2-0:
@@ -24,6 +24,16 @@ clean-2-1:
 
 clean-4-0: TARGET := $(TARGET_4_0)
 clean-4-0:
+	-rm -rf $(tmpdir)
+	-rm -rf $(objdir)
+	-rm -f $(outdir)$(ASSEMBLY)
+	-rm -f $(outdir)$(ASSEMBLY).mdb
+	-rm -f $(outdir)$(NAME).xml
+	-rm -f $(outdir)$(NAME).sigdata
+	-rm -f $(outdir)$(NAME).optdata
+
+clean-4-5: TARGET := $(TARGET_4_5)
+clean-4-5:
 	-rm -rf $(tmpdir)
 	-rm -rf $(objdir)
 	-rm -f $(outdir)$(ASSEMBLY)
@@ -66,7 +76,7 @@ do-2-1: FLAGS += $(FLAGS_2_1)
 do-2-1: TARGET := $(TARGET_2_1)
 do-2-1: VERSION := $(VERSION_2_1)
 do-2-1: monolibdir = $(monolibdir2)
-do-2-1: $(objdir) $(objdir)$(TARGET_2_1) $(objdir)$(TARGET_4_0) $(objdir)$(TARGET_2_1)/$(ASSEMBLY)
+do-2-1: $(objdir) $(objdir)$(TARGET_2_1) $(objdir)$(TARGET_4_0) $(objdir)$(TARGET_4_5) $(objdir)$(TARGET_2_1)/$(ASSEMBLY)
 	@mkdir -p $(outdir)
 	@cp $(objdir)$(ASSEMBLY) $(outdir)
 	@if test -e $(objdir)$(NAME).xml; then \
@@ -115,6 +125,33 @@ do-4-0: $(objdir) $(objdir)$(TARGET_2_0) $(objdir)$(TARGET_4_0) $(objdir)$(TARGE
 	@if test -e Microsoft.FSharp.Targets; then \
 		cp Microsoft.FSharp.Targets $(outdir)Microsoft.FSharp.Targets; \
 	fi
+do-4-5: DEFINES += $(DEFINES_4_5)
+do-4-5: REFERENCES += $(REFERENCES_4_5)
+do-4-5: FLAGS += $(FLAGS_4_5)
+do-4-5: TARGET := $(TARGET_4_5)
+do-4-5: VERSION := $(VERSION_4_5)
+do-4-5: monolibdir = $(monolibdir45)
+do-4-5: $(objdir) $(objdir)$(TARGET_2_0) $(objdir)$(TARGET_4_5) $(objdir)$(TARGET_4_5)/$(ASSEMBLY)
+	@mkdir -p $(outdir)
+	@cp $(objdir)$(ASSEMBLY) $(outdir)
+	@if test -e $(objdir)$(NAME).xml; then \
+	    cp $(objdir)$(NAME).xml $(outdir); \
+	fi
+	@if test -e $(objdir)$(ASSEMBLY).mdb; then \
+	    cp $(objdir)$(ASSEMBLY).mdb $(outdir); \
+	fi
+	@if test -e $(objdir)$(NAME).sigdata; then \
+		cp $(objdir)$(NAME).sigdata $(outdir); \
+	fi
+	@if test -e $(objdir)$(NAME).optdata; then \
+		cp $(objdir)$(NAME).optdata $(outdir); \
+	fi
+	@if test "x$(DELAY_SIGN)" = "x1"; then \
+		sn -q -R $(outdir)$(ASSEMBLY) $(srcdir)../../../mono.snk; \
+	fi
+	@if test -e Microsoft.FSharp.Targets; then \
+		cp Microsoft.FSharp.Targets $(outdir)Microsoft.FSharp.Targets; \
+	fi
 
 install-lib-2: TARGET := $(TARGET_2_0)
 install-lib-2: VERSION := $(VERSION_2_0)
@@ -125,6 +162,9 @@ install-lib-2-1: VERSION := $(VERSION_2_1)
 install-lib-4: TARGET := $(TARGET_4_0)
 install-lib-4: VERSION := $(VERSION_4_0)
 
+install-lib-4-5: TARGET := $(TARGET_4_5)
+install-lib-4-5: VERSION := $(VERSION_4_5)
+
 install-bin-2: TARGET := $(TARGET_2_0)
 install-bin-2: VERSION := 2
 
@@ -132,6 +172,7 @@ install-bin-2-1: TARGET := $(TARGET_2_1)
 install-bin-2-1: VERSION := 2.1
 
 install-bin-4: TARGET := $(TARGET_4_0)
+install-bin-4-5: TARGET := $(TARGET_4_5)
 
 
 # Install the library binaries in the GAC and the framework directory, 
@@ -142,7 +183,7 @@ install-bin-4: TARGET := $(TARGET_4_0)
 # For F# 3.0 project files this is
 #     .../Microsoft SDKs/F#/3.0/Framework/v4.0/Microsoft.FSharp.Targets
 # 
-install-lib-2 install-lib-2-1 install-lib-4:
+install-lib-2 install-lib-2-1 install-lib-4 install-lib-4-5:
 	@echo "Installing $(ASSEMBLY)"
 	@mkdir -p $(DESTDIR)$(monodir)/$(TARGET)
 	gacutil -i $(outdir)$(ASSEMBLY) -root $(DESTDIR)$(monorootdir) -package $(TARGET)
@@ -168,26 +209,26 @@ install-lib-2 install-lib-2-1 install-lib-4:
 		ln -fs ../gac/$(NAME)/$(VERSION)__$(TOKEN)/$(NAME).optdata $(DESTDIR)$(monodir)/$(TARGET)/$(NAME).optdata; \
 	fi
 
-install-lib-4-5: install-lib-4
-	@if test -e $(DESTDIR)$(monodir)/4.5/; then \
-		ln -fs ../4.0/$(ASSEMBLY) $(DESTDIR)$(monodir)/4.5/$(ASSEMBLY); \
-		if test -e $(DESTDIR)$(monodir)/4.0/$(ASSEMBLY).config; then \
-		    ln -fs ../4.0/$(ASSEMBLY).config $(DESTDIR)$(monodir)/4.5/$(ASSEMBLY).config; \
-		fi; \
-		if test -e $(DESTDIR)$(monodir)/4.0/$(NAME).sigdata; then \
-		    ln -fs ../4.0/$(NAME).sigdata $(DESTDIR)$(monodir)/4.5/$(NAME).sigdata; \
-		fi; \
-		if test -e $(DESTDIR)$(monodir)/4.0/$(NAME).xml; then \
-		    ln -fs ../4.0/$(NAME).xml $(DESTDIR)$(monodir)/4.5/$(NAME).xml; \
-		fi; \
-		if test -e $(DESTDIR)$(monodir)/4.0/$(NAME).optdata; then \
-		    ln -fs ../4.0/$(NAME).optdata $(DESTDIR)$(monodir)/4.5/$(NAME).optdata; \
-		fi; \
-	fi
+#install-lib-4-5: install-lib-4
+#	@if test -e $(DESTDIR)$(monodir)/4.5/; then \
+#		ln -fs ../4.0/$(ASSEMBLY) $(DESTDIR)$(monodir)/4.5/$(ASSEMBLY); \
+#		if test -e $(DESTDIR)$(monodir)/4.0/$(ASSEMBLY).config; then \
+#		    ln -fs ../4.0/$(ASSEMBLY).config $(DESTDIR)$(monodir)/4.5/$(ASSEMBLY).config; \
+#		fi; \
+#		if test -e $(DESTDIR)$(monodir)/4.0/$(NAME).sigdata; then \
+#		    ln -fs ../4.0/$(NAME).sigdata $(DESTDIR)$(monodir)/4.5/$(NAME).sigdata; \
+#		fi; \
+#		if test -e $(DESTDIR)$(monodir)/4.0/$(NAME).xml; then \
+#		    ln -fs ../4.0/$(NAME).xml $(DESTDIR)$(monodir)/4.5/$(NAME).xml; \
+#		fi; \
+#		if test -e $(DESTDIR)$(monodir)/4.0/$(NAME).optdata; then \
+#		    ln -fs ../4.0/$(NAME).optdata $(DESTDIR)$(monodir)/4.5/$(NAME).optdata; \
+#		fi; \
+#	fi
 
 # The binaries fsc.exe and fsi.exe only get installed for Mono 4.0 profile
 # This also installs 'fsharpc' and 'fsharpi'
-install-bin-4:
+install-bin-4 install-bin-4-5:
 	sed -e 's,[@]DIR[@],$(monodir)/$(TARGET),g' -e 's,[@]TOOL[@],$(ASSEMBLY),g' < $(topdir)launcher > $(outdir)$(subst fs,fsharp,$(NAME))$(VERSION)
 	chmod +x $(outdir)$(subst fs,fsharp,$(NAME))$(VERSION)
 	@mkdir -p $(DESTDIR)$(monodir)/$(TARGET)
@@ -196,7 +237,7 @@ install-bin-4:
 	$(INSTALL_BIN) $(outdir)$(subst fs,fsharp,$(NAME))$(VERSION) $(DESTDIR)$(bindir)
 
 
-$(objdir) $(objdir)$(TARGET_2_0) $(objdir)$(TARGET_2_1) $(objdir)$(TARGET_4_0):
+$(objdir) $(objdir)$(TARGET_2_0) $(objdir)$(TARGET_2_1) $(objdir)$(TARGET_4_0) $(objdir)$(TARGET_4_5):
 	mkdir -p $@
 
 $(objdir)$(TARGET_2_0)/$(ASSEMBLY): $(RESOURCES) $(SOURCES)
@@ -206,4 +247,7 @@ $(objdir)$(TARGET_2_1)/$(ASSEMBLY): $(RESOURCES) $(SOURCES)
 	mono $(MONO_OPTIONS) $(FSC) -o:$(objdir)$(ASSEMBLY) $(REFERENCES) $(DEFINES) $(FLAGS) $(patsubst %,--resource:%,$(RESOURCES)) $(SOURCES)
 
 $(objdir)$(TARGET_4_0)/$(ASSEMBLY):  $(RESOURCES) $(SOURCES)
+	mono $(MONO_OPTIONS) $(FSC) -o:$(objdir)$(ASSEMBLY) $(REFERENCES) $(DEFINES) $(FLAGS) $(patsubst %,--resource:%,$(RESOURCES)) $(SOURCES)
+
+$(objdir)$(TARGET_4_5)/$(ASSEMBLY):  $(RESOURCES) $(SOURCES)
 	mono $(MONO_OPTIONS) $(FSC) -o:$(objdir)$(ASSEMBLY) $(REFERENCES) $(DEFINES) $(FLAGS) $(patsubst %,--resource:%,$(RESOURCES)) $(SOURCES)

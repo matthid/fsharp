@@ -182,8 +182,8 @@ $(tmpdir)ilpars.fs: ../../absil/ilpars.fsy
 	@-mkdir -p ../FSharp.Compiler/.libs/
 	cp -p $(tmpdir)ilpars.fs* ../FSharp.Compiler/.libs/
 
-do-proto: do-4-0
+do-proto: do-4-0 do-4-5
 
-clean: clean-4-0
+clean: clean-4-0 clean-4-5
 
 include $(topdir)/src/fsharp/targets.make

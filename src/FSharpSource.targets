@@ -22,6 +22,7 @@
     <VersionFile>$(FSharpSourcesRoot)\source-build-version</VersionFile>
     <VersionFile Condition="'$(TargetFramework)' == 'net20'">$(FSharpSourcesRoot)\source-build-version-2.3.0.0</VersionFile>
     <VersionFile Condition="'$(TargetFramework)' == 'net40'">$(FSharpSourcesRoot)\source-build-version-4.3.0.0</VersionFile>
+    <VersionFile Condition="'$(TargetFramework)' == 'net45'">$(FSharpSourcesRoot)\source-build-version-4.3.0.0</VersionFile>
     <VersionFile Condition="'$(TargetFramework)' == 'portable-net4+sl4+wp71+win8'">$(FSharpSourcesRoot)\source-build-version-2.3.5.0</VersionFile>
     <VersionFile Condition="'$(TargetFramework)' == 'portable-net45+sl5+win8'">$(FSharpSourcesRoot)\source-build-version-2.3.5.0</VersionFile>    
 <!--
@@ -107,6 +108,21 @@ Some other NuGET monikers to support in the future, see http://docs.nuget.org/do
   <PropertyGroup Condition="'$(TargetFramework)'=='net40'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkOutputDirectory>4.0</TargetFrameworkOutputDirectory>
+    <DefineConstants>$(DefineConstants);FX_ATLEAST_40</DefineConstants>
+    <DefineConstants>$(DefineConstants);FX_ATLEAST_35</DefineConstants>
+    <DefineConstants>$(DefineConstants);BE_SECURITY_TRANSPARENT</DefineConstants>
+    <DefineConstants>$(DefineConstants);QUERIES_IN_FSLIB</DefineConstants>
+    <DefineConstants>$(DefineConstants);PUT_TYPE_PROVIDERS_IN_FSCORE;</DefineConstants>
+    <DefineConstants>$(DefineConstants);FX_ATLEAST_LINQ</DefineConstants>
+    <DefineConstants>$(DefineConstants);FX_NO_BIGINT_CULTURE_PARSE</DefineConstants>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <!-- MSbuild works out the assembly references -->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkOutputDirectory>4.5</TargetFrameworkOutputDirectory>
+    <DefineConstants>$(DefineConstants);FX_ATLEAST_45</DefineConstants>
     <DefineConstants>$(DefineConstants);FX_ATLEAST_40</DefineConstants>
     <DefineConstants>$(DefineConstants);FX_ATLEAST_35</DefineConstants>
     <DefineConstants>$(DefineConstants);BE_SECURITY_TRANSPARENT</DefineConstants>
@@ -696,8 +712,9 @@ Some other NuGET monikers to support in the future, see http://docs.nuget.org/do
             Text="Configuration '$(Configuration)' is not one of the supported configurations: Debug, Release, Proto"
             Condition="'$(Configuration)'!='Release' and '$(Configuration)'!='Debug' and '$(Configuration)'!='Proto'"/>
     <Error
-            Text="TargetFramework '$(TargetFramework)' is not one of the supported configurations: 'empty', net20, net40, mono21, wp7, sl5, sl5-compiler, portable-net4+sl4+wp71+win8, portable-net45+sl5+win8"
+            Text="TargetFramework '$(TargetFramework)' is not one of the supported configurations: 'empty', net20, net40, net45, mono21, wp7, sl5, sl5-compiler, portable-net4+sl4+wp71+win8, portable-net45+sl5+win8"
             Condition="! ('$(TargetFramework)' == 'net40' or 
+		          '$(TargetFramework)' == 'net45' or 
                           '$(TargetFramework)' == 'net20' or 
                           '$(TargetFramework)' == 'mono21' or 
                           '$(TargetFramework)' == 'sl5' or 
